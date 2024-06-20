@@ -3,7 +3,7 @@
 This README provides instructions on how to setup and use a Dataflow template that integrates Google Cloud services with Meta's Conversions API.
 
 ## About the Google Cloud to Meta CAPI Dataflow template
-The GCP to Meta CAPI template encapsulates the logic for reading data from a Google Cloud source (BigQuery or Google Cloud Storage) and sending that data to Meta using Conversions API. It was developed for events collected in batch (like Offline events) and is not suitable for real-time events. Below are the data processing steps managed by the template and Meta CAPI connector:
+The GCP to Meta CAPI template encapsulates the logic for reading data from a Google Cloud source (BigQuery or Google Cloud Storage) and sending that data to Meta using Conversions API. It was developed for events collected in batch (like Offline events) and is not suitable for real-time events. Below are the data processing steps managed by the template and the Meta CAPI connector:
 - (1) Read offline events from a BigQuery table or Google Cloud Storage file;
 - (2) Parse single record to the Conversions API Json;
 - (3) Group the parsed records into micro-batches (e.g. 50 events per API call);
@@ -11,11 +11,12 @@ The GCP to Meta CAPI template encapsulates the logic for reading data from a Goo
 
 ![Alt text](gcp_to_capi_dataflow_logic.png?raw=true "Processing logic")
 
-## Prerequisites
-- Google Cloud SDK (gcloud) installed and configured
-- Access to Google Cloud Platform (GCP) with necessary permissions
 
-## Setup Instructions
+## How to install
+
+###  Prerequisites
+- Google Cloud SDK (gcloud) installed and configured;
+- Access to Google Cloud Platform (GCP) with necessary permissions.
 
 ### 1. Enable Required APIs
 Enable the necessary APIs by running the following command:
@@ -33,13 +34,13 @@ export PROJECT="YOUR_GCP_PROJECT"
 gcloud config set project $PROJECT
 ```
 
-### 3. Create a Cloud Storage bucket for storing the template
+### 3. Create a Cloud Storage bucket for storing the templates
 Create a Cloud Storage bucket to store the Dataflow template:
 ```
 gsutil mb gs://$BUCKET
 ```
 
-### 4. Create an Artifact Registry repository (if not exists), used for building the template
+### 4. Create an Artifact Registry repository (if not exists), used for building the templates
 ```
 gcloud artifacts repositories create $REPOSITORY \
     --repository-format=docker \
@@ -47,7 +48,9 @@ gcloud artifacts repositories create $REPOSITORY \
 ```
 
 ### 5. Build the Dataflow template
-Build the Dataflow template using the following command
+
+#### 5.1 Install the Dataflow template for BigQuery to Meta Conversions API
+Build the Dataflow template using the command below. The resulting template file will be stored on the bucket defined above.
 ```
 export TEMPLATE_NAME="bigquery_to_meta_conversions_api"
 gcloud dataflow flex-template build gs://$BUCKET/$TEMPLATE_NAME.json \
@@ -60,20 +63,29 @@ gcloud dataflow flex-template build gs://$BUCKET/$TEMPLATE_NAME.json \
     --env "FLEX_TEMPLATE_PYTHON_REQUIREMENTS_FILE=requirements.txt"\
     --env "FLEX_TEMPLATE_PYTHON_SETUP_FILE=setup.py"
 ```
-## Pipeline Code Overview
 
-The Python script provided is a Dataflow pipeline that reads data from a BigQuery table, processes it, and writes the results to Meta's Conversions API. It also supports writing failed records to a Dead Letter Queue in BigQuery.
-
-### Key Components:
-- *MetaCAPIConnectorOptions*: Custom options for the pipeline.
-- *Read from BigQuery*: Reads data from the specified BigQuery table.
-- *Write to Meta CAPI*: Custom I/O transform to write data to Meta's Conversions API.
-- *Filter CAPI output*: Filters the output based on the status (e.g., ERROR_ONLY).
-- *Write output to DLQ*: Writes failed records to a specified BigQuery table.
+#### 5.2 Install the Dataflow template for Google Cloud Storage (GCS) to Meta Conversions API
+Build the Dataflow template using the command below. The resulting template file will be stored on the bucket defined above.
+```
+export TEMPLATE_NAME="gcs_to_meta_conversions_api"
+gcloud dataflow flex-template build gs://$BUCKET/$TEMPLATE_NAME.json \
+    --image-gcr-path "$REGION-docker.pkg.dev/$PROJECT/$REPOSITORY/$TEMPLATE_NAME:latest" \
+    --sdk-language "PYTHON" \
+    --flex-template-base-image "PYTHON3" \
+    --py-path "." \
+    --metadata-file "${TEMPLATE_NAME}_metadata.json" \
+    --env "FLEX_TEMPLATE_PYTHON_PY_FILE=$TEMPLATE_NAME.py" \
+    --env "FLEX_TEMPLATE_PYTHON_REQUIREMENTS_FILE=requirements.txt"\
+    --env "FLEX_TEMPLATE_PYTHON_SETUP_FILE=setup.py"
+```
 
 ## How to use
 
-### 1. Expected table source format
+###  Prerequisites
+- Access to Google Cloud Platform (GCP) with necessary permissions.
+- Meta Conversions API access token (https://developers.facebook.com/docs/marketing-api/conversions-api/get-started/). If you serve multiple datasets from the same table, you should generate a system user access token rather than a dataset-scoped access token.
+  
+### 1. Expected source format (for both BigQuery and GCS)
 
 Below is the expected table source format, please consult following documentation for further details:
 - Standard parameters: https://developers.facebook.com/docs/marketing-api/conversions-api/parameters/server-event/
@@ -119,6 +131,20 @@ Below is the expected table source format, please consult following documentatio
 | Batch Size (number max of events per conversions api call) | INT | No | 50 | Number max of rows per single API call. Default value 50 |
 | Max Conversions API retry attempts | INT | No | 3 | Number max of retry in case of server error. Default 3 |
 | Exponential backoff factor for Conversions API retry | FLOAT | No | 2 | Number of times to wait in case of server error. Default, use an exponential factor of 2 |
+
+
+## Pipeline Code Overview
+
+The Python script provided is a Dataflow pipeline that reads data from a BigQuery table, processes it, and writes the results to Meta's Conversions API. It also supports writing failed records to a Dead Letter Queue in BigQuery.
+
+### Key Components:
+- *MetaCAPIConnectorOptions*: Custom options for the pipeline.
+- *Read from BigQuery*: Reads data from the specified BigQuery table.
+- *Write to Meta CAPI*: Custom I/O transform to write data to Meta's Conversions API.
+- *Filter CAPI output*: Filters the output based on the status (e.g., ERROR_ONLY).
+- *Write output to DLQ*: Writes failed records to a specified BigQuery table.
+
+
 
 
 
