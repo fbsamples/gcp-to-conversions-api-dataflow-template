@@ -115,7 +115,7 @@ Below is the expected table source format, please consult following documentatio
 | ge  | STRING    | No | Yes    | Multiple value, Hashed and normalized email. For multiple values, use a separator (e.g. 62a14e44f765419d10fea99367361a727c12365e2520f32218d505ed9aa0f62f\|90a14e44f765419d10fea99367361a727c12365e2520f32218d505ed9aa0f33f) |
 | content_type  | STRING    | No | No    | Should be either “product” or “product_group” depending on the type of contents send on the “content_ids” |
 | num_items  | INTEGER    | No | No    | Use only with InitiateCheckout events. The number of items that a user tries to buy during checkout. |
-| custom_prop*  | STRING | No | No    | Any non-standard parameters added by the advertisers |
+| **Any non-standard property** | STRING | No | No    | Any non-standard parameters added by the advertisers; would be considered as a custom property |
 
 ### 2. Dataflow template parameters
 
