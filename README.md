@@ -8,7 +8,8 @@ The GCP to Meta CAPI template encapsulates the logic for reading data from a Goo
 - (2) Parse single record to the Conversions API Json;
 - (3) Group the parsed records into micro-batches (e.g. 50 events per API call);
 - (4) Make the API calls to Conversions API and store the output logs (success or failure) into a dead letter table defined by the advertiser.
-![Alt text](gcp_to_capi_dataflow_logic.jpg?raw=true "Processing logic")
+
+![Alt text](gcp_to_capi_dataflow_logic.png?raw=true "Processing logic")
 
 ## Prerequisites
 - Google Cloud SDK (gcloud) installed and configured
