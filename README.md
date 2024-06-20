@@ -132,19 +132,15 @@ Below is the expected table source format, please consult following documentatio
 | Max Conversions API retry attempts | INT | No | Applicable for both BigQuery & GCS templates | 3 | Number max of retry in case of server error. Default 3 |
 | Exponential backoff factor for Conversions API retry | FLOAT | No | Applicable for both BigQuery & GCS templates | 2 | Number of times to wait in case of server error. Default, use an exponential factor of 2 |
 
+### 3. Output logs format
 
-## Pipeline Code Overview
-
-The Python script provided is a Dataflow pipeline that reads data from a BigQuery table, processes it, and writes the results to Meta's Conversions API. It also supports writing failed records to a Dead Letter Queue in BigQuery.
-
-### Key Components:
-- *MetaCAPIConnectorOptions*: Custom options for the pipeline.
-- *Read from BigQuery*: Reads data from the specified BigQuery table.
-- *Write to Meta CAPI*: Custom I/O transform to write data to Meta's Conversions API.
-- *Filter CAPI output*: Filters the output based on the status (e.g., ERROR_ONLY).
-- *Write output to DLQ*: Writes failed records to a specified BigQuery table.
-
-
+| Field name | Type | Value |
+| --- | --- |:--- |
+| metacapisink_timestamp | String | Processing timestamp |
+| metacapisink_status | String | Status for the event, could be `SUCCESS` if the event was sent successfully to Meta or `ERROR` in case of parsing error or if the event was rejected by Meta |
+| metacapisink_failure_pipeline_step | String | Step where the event failed; It can be _ParseRowToMetaConversionsAPIBody (if the event is missing a required field), _MakeMetaConversionsAPICalls (in case of reject by Meta), or `null` (in case of success) |
+| metacapisink_output_message | String | API response in case of success or error message for failures |
+| metacapisink_input_element | String | input record as a string |
 
 
 
