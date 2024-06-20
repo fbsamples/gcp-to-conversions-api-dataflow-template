@@ -128,7 +128,7 @@ Below is the expected table source format, please consult following documentatio
 | BigQuery Source Table | GCP Table ID | Yes | Applicable for both BigQuery & GCS templates | - | Table where to store API outputs(success or/and error message and input), should be a GCP table ID (bigquery-project:dataset.output_table) |
 | BigQuery Dead Letter Queue filter output | ENUN: (ERROR_ONLY, SUCCESS_ONLY, ALL) | Yes | Applicable for both BigQuery & GCS templates | - | Type of output to logs: ERROR_ONLY: only logs output with errors; SUCCESS_ONLY: only output with success API response; ALL: logs all output including errors and success |
 | Multi value separator | STRING | No | Applicable for both BigQuery & GCS templates | \| | Separator used for fields having multiple values such as emails (em), phones(ph) or content IDs (content_ids) |
-| Batch Size (number max of events per conversions api call) | INT | No | Applicable for both BigQuery & GCS templates | 50 | Number max of rows per single API call. Default value 50 |
+| Batch Size (number max of events per conversions api call) | INT | No | Applicable for both BigQuery & GCS templates | 50 | Number max of rows per single API call. Default value 50<br>**If at least one record in a batch is invalid, the entire batch will be rejected** |
 | Max Conversions API retry attempts | INT | No | Applicable for both BigQuery & GCS templates | 3 | Number max of retry in case of server error. Default 3 |
 | Exponential backoff factor for Conversions API retry | FLOAT | No | Applicable for both BigQuery & GCS templates | 2 | Number of times to wait in case of server error. Default, use an exponential factor of 2 |
 
