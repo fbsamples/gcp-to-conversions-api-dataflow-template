@@ -48,9 +48,9 @@ gcloud artifacts repositories create $REPOSITORY \
 ```
 
 ### 5. Build the Dataflow template
-
-#### 5.1 Install the Dataflow template for BigQuery to Meta Conversions API
 Build the Dataflow template using the command below. The resulting template file will be stored on the bucket defined above.
+
+#### 5.1 BigQuery to Meta Conversions API Dataflow template
 ```
 export TEMPLATE_NAME="bigquery_to_meta_conversions_api"
 gcloud dataflow flex-template build gs://$BUCKET/$TEMPLATE_NAME.json \
@@ -64,8 +64,7 @@ gcloud dataflow flex-template build gs://$BUCKET/$TEMPLATE_NAME.json \
     --env "FLEX_TEMPLATE_PYTHON_SETUP_FILE=setup.py"
 ```
 
-#### 5.2 Install the Dataflow template for Google Cloud Storage (GCS) to Meta Conversions API
-Build the Dataflow template using the command below. The resulting template file will be stored on the bucket defined above.
+#### 5.2 Google Cloud Storage (GCS) to Meta Conversions API Dataflow template
 ```
 export TEMPLATE_NAME="gcs_to_meta_conversions_api"
 gcloud dataflow flex-template build gs://$BUCKET/$TEMPLATE_NAME.json \
