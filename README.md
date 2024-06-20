@@ -139,8 +139,8 @@ Below is the expected table source format, please consult following documentatio
 | metacapisink_timestamp | String | Processing timestamp |
 | metacapisink_status | String | Status for the event; could be `SUCCESS` if the event was sent successfully to Meta or `ERROR` in case of parsing error or if the event was rejected by Meta |
 | metacapisink_failure_pipeline_step | String | Step where the event failed; It can be `_ParseRowToMetaConversionsAPIBody` (if the event is missing a required field), `_MakeMetaConversionsAPICalls` (in case of reject by Meta), or `null` (in case of success) |
-| metacapisink_output_message | String | API response in case of success or error message for failures |
-| metacapisink_input_element | String | input record as a string |
+| metacapisink_output_message | String | API response in case of success or error message for failures <br>**If at least one record in a micro-batch is invalid, the entire batch will be rejected and all records in the batch will receive the same error message.** |
+| metacapisink_input_element | String | Original input record as a string |
 
 
 
