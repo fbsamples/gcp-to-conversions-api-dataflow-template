@@ -91,7 +91,7 @@ Below is the expected table source format, please consult following documentatio
 - Custom data fields: https://developers.facebook.com/docs/marketing-api/conversions-api/parameters/custom-data 
 - User data fields (hashing and normalization requirements): https://developers.facebook.com/docs/marketing-api/conversions-api/parameters/customer-information-parameters 
 
-| Field name    | Type | Mandatory | Multi\-value| Description |
+| Field name    | Type | Mandatory | Multivalue field | Description |
 | --- | --- | --- | --- | :--- |
 | data_set_id  | INTEGER    | Yes  | No    | Destination data_set_id (e.g. 350218134519384) |
 | event_name  | STRING    | Yes  | No    | Event name (e.g. Purchase) |
@@ -122,6 +122,7 @@ Below is the expected table source format, please consult following documentatio
 | Parameter | Type | Required | Scope | Default value | Description |
 | --- | --- | --- | --- | --- | :--- |
 | BigQuery Source Table  | GCP Table ID | Yes | Applicable only for BigQuery template | - | Source table, should be a GCP table ID (bigquery-project:dataset.input_table) |
+| Google Cloud Storage Source File  | GCS Source File URI | Yes | Applicable only for GCS template | - | Source file, should be a GCS source file URI (Example: gs://bucket_name/path_to_file.csv) |
 | Conversions API access token  | STRING | Yes | Applicable for both BigQuery & GCS templates | - | Access Token for accessing Conversions API. Check instructions here: https://developers.facebook.com/docs/marketing-api/conversions-api/get-started/#access-token |
 | BigQuery Dead Letter Queue table  | GCP Table ID | Yes | Applicable for both BigQuery & GCS templates | - | Source table, should be a GCP table ID (bigquery-project:dataset.input_table) |
 | BigQuery Source Table | GCP Table ID | Yes | Applicable for both BigQuery & GCS templates | - | Table where to store API outputs(success or/and error message and input), should be a GCP table ID (bigquery-project:dataset.output_table) |
