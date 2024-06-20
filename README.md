@@ -2,6 +2,9 @@
 
 This README provides instructions on how to setup and use a Dataflow template that integrates Google Cloud services with Meta's Conversions API.
 
+## About the Google Cloud to Meta CAPI Dataflow template
+The GCP to Meta CAPI template encapsulates the logic for reading data from a Google Cloud source (BigQuery or Google Cloud Storage) and sending that data to Meta using Conversions API. It was developed for events collected in batch (like Offline events) and is not suitable for real-time events. Below are the data processing steps managed by the template and Meta CAPI connector: (1) Read offline events from a BigQuery table or Google Cloud Storage file; (2) Parse single record to the Conversions API Json; (3) Group the parsed records into micro-batches (e.g. 50 events per API call for performance optimisations); (4) Make the API calls to Conversions API and store the output logs (success or failure) into the dead letter table defined by the advertiser.
+
 ## Prerequisites
 - Google Cloud SDK (gcloud) installed and configured
 - Access to Google Cloud Platform (GCP) with necessary permissions
