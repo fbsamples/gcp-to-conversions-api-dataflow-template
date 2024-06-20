@@ -1,0 +1,89 @@
+{
+  "name": "Google Cloud Storage to Meta Conversions API",
+  "description": "The Google Cloud Storage to Meta Conversions API template is a batch pipeline that ingests data from Google Cloud into Meta Conversions API. The template can read a Cloud Storage file as source.",
+  "parameters": [
+    {
+      "name": "access_token",
+      "label": "Conversions API access token.",
+      "helpText": "API token required for making Conversions API calls, here how to generate one: https://developers.facebook.com/docs/marketing-api/conversions-api/get-started/#access-token",
+      "paramType": "TEXT"
+    },
+    {
+      "name": "inputFileSpec",
+      "label": "GCS source file",
+      "helpText": "GCS source file URI. (Example: gs://bucket_name/path_to_file.csv)",
+      "regexes": [
+        "^gs:\\/\\/[^\\n\\r]+$" 
+      ],
+      "paramType": "GCS_READ_FILE"
+    },
+    {
+      "name": "multi_value_separator",
+      "label": "Multi value separator.",
+      "helpText": "Default separators for columns having multiple values (e.g. content_ids). The default value is '|' ",
+      "isOptional": true,
+      "paramType": "TEXT",
+      "defaultValue": "|"
+    },
+    {
+      "name": "batch_size",
+      "label": "Batch Size (number max of events per conversions api call)",
+      "helpText": "Batch Size used for bulk api calls of events to Conversions API. Default: 20)",
+      "isOptional": true,
+      "regexes": [
+        "^[0-9]+$"
+      ],
+      "paramType": "NUMBER",
+      "defaultValue": "50"
+    },
+    {
+      "name": "max_api_retry_attempts",
+      "label": "Max Conversions API retry attempts.",
+      "helpText": "Max Conversions API retry attempts, must be \u003e 0. Default: 3",
+      "isOptional": true,
+      "regexes": [
+        "^[0-9]+$"
+      ],
+      "paramType": "NUMBER",
+      "defaultValue": "3"
+    },
+    {
+      "name": "api_retry_backoff_factor",
+      "label": "Exponential backoff factor for Conversions API retry.",
+      "helpText": "Exponential backoff factor for Conversions API retry (e.g., 2 means 1, 2, 4, 8 seconds, ...). Default: 2",
+      "isOptional": true,
+      "paramType": "NUMBER",
+      "defaultValue": "2"
+    },
+    {
+      "name": "outputTableSpec",
+      "label": "Dead Letter Queue table",
+      "helpText": "BigQuery Dead Letter Queue table spec. (Example: bigquery-project:dataset.output_table)",
+      "regexes": [
+        ".+[\\.:].+\\..+"
+      ],
+      "paramType": "TEXT"
+    },
+    {
+      "name": "output_type",
+      "label": "Dead Letter Queue output to filter ",
+      "helpText": "Type of output to save on the Dead Letter queue table (ALL, SUCCESS_ONLY, ERROR_ONLY). Defaults to: ERROR_ONLY.",
+      "regexes": [
+        "^(ALL|SUCCESS_ONLY|ERROR_ONLY)$"
+      ],
+      "enumOptions": [
+        {
+          "value": "ERROR_ONLY"
+        },
+        {
+          "value": "SUCCESS_ONLY"
+        },
+        {
+          "value": "ALL"
+        }
+      ],
+      "paramType": "ENUM",
+      "defaultValue": "PLAINTEXT"
+    }
+  ]
+}
