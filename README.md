@@ -91,15 +91,15 @@ Below is the expected table source format, please consult following documentatio
 - Custom data fields: https://developers.facebook.com/docs/marketing-api/conversions-api/parameters/custom-data 
 - User data fields (hashing and normalization requirements): https://developers.facebook.com/docs/marketing-api/conversions-api/parameters/customer-information-parameters 
 
-| Field name    | Type | Mandatory | Multi-value| Description |
+| Field name    | Type | Mandatory | Multi\-value| Description |
 | --- | --- | --- | --- | :--- |
-| data_set_id  | INTEGER    | Yes  | No    | Destination data_set_id (e.g. 350218134519384)  |
-| event_name  | STRING    | Yes  | No    | Event name (e.g. Purchase)  |
-| event_time  | INTEGER    | Yes  | No    | Unix timestamp in seconds indicating when the actual event occurred (eg. 1708211706)  |
-| action_source  | STRING    | Yes  | No    | Should be “physical_store” for Offline events  |
-| order_id  | STRING    | No  | No    | Unique transaction or order ID (e.g. order1234)  |
-| value  | FLOAT    | Yes if event_name = ‘Purchase’ | No    | Value of the purchase (e.g. 150.5). Optional for non-Purchase event  |
-| currency  | INTEGER    | Yes if event_name = ‘Purchase’  | No    | Currency (e.g. GBP),  must be a valid ISO 4217 three-digit currency code. Optional for non-Purchase event  |
+| data_set_id  | INTEGER    | Yes  | No    | Destination data_set_id (e.g. 350218134519384) |
+| event_name  | STRING    | Yes  | No    | Event name (e.g. Purchase) |
+| event_time  | INTEGER    | Yes  | No    | Unix timestamp in seconds indicating when the actual event occurred (eg. 1716764400) |
+| action_source  | STRING    | Yes  | No    | Should be “physical_store” for Offline events |
+| order_id  | STRING    | No  | No    | Unique transaction or order ID (e.g. order1234) |
+| value  | FLOAT    | Yes if event_name = ‘Purchase’ | No    | Value of the purchase (e.g. 150.5). Optional for non-Purchase event |
+| currency  | INTEGER    | Yes if event_name = ‘Purchase’  | No    | Currency (e.g. GBP), must be a valid ISO 4217 three-digit currency code. Optional for non-Purchase event  |
 | content_ids  | STRING    | No | Yes    | Multiple value, Content IDs/SKU associated with the events. For multiple values, use a separator (e.g. ABC\|EFG)  |
 | em  | STRING    | No | Yes    | Multiple value, Hashed and normalized email. For multiple values, use a separator (e.g. 62a14e44f765419d10fea99367361a727c12365e2520f32218d505ed9aa0f62f\|90a14e44f765419d10fea99367361a727c12365e2520f32218d505ed9aa0f33f) |
 | ph  | STRING    | No | Yes    | Multiple value, Hashed and normalized email. For multiple values, use a separator (e.g. 62a14e44f765419d10fea99367361a727c12365e2520f32218d505ed9aa0f62f\|90a14e44f765419d10fea99367361a727c12365e2520f32218d505ed9aa0f33f) |
@@ -119,17 +119,17 @@ Below is the expected table source format, please consult following documentatio
 
 ### 2. Dataflow template parameters
 
-| Parameter | Type | Required | Default value | Description |
-| -------- | ------- | ------- | ------- | ------- |
-| BigQuery Source Table  | GCP Table ID | Yes | - | Source table, should be a GCP table ID (bigquery-project:dataset.input_table) |
-| Conversions API access token  | STRING | Yes | - | Access Token for accessing Conversions API. Check instructions here: https://developers.facebook.com/docs/marketing-api/conversions-api/get-started/#access-token |
-| BigQuery Dead Letter Queue table  | GCP Table ID | Yes | - | Source table, should be a GCP table ID (bigquery-project:dataset.input_table) |
-| BigQuery Source Table | GCP Table ID | Yes | - | Table where to store API outputs(success or/and error message and input), should be a GCP table ID (bigquery-project:dataset.output_table) |
-| BigQuery Dead Letter Queue filter output | ENUN: (ERROR_ONLY, SUCCESS_ONLY, ALL) | Yes | - | Type of output to logs: ERROR_ONLY: only logs output with errors; SUCCESS_ONLY: only output with success API response; ALL: logs all output including errors and success |
-| Multi value separator | STRING | No | \| | Separator used for fields having multiple values such as emails (em), phones(ph) or content IDs (content_ids) |
-| Batch Size (number max of events per conversions api call) | INT | No | 50 | Number max of rows per single API call. Default value 50 |
-| Max Conversions API retry attempts | INT | No | 3 | Number max of retry in case of server error. Default 3 |
-| Exponential backoff factor for Conversions API retry | FLOAT | No | 2 | Number of times to wait in case of server error. Default, use an exponential factor of 2 |
+| Parameter | Type | Required | Scope | Default value | Description |
+| --- | --- | --- | --- | --- | :--- |
+| BigQuery Source Table  | GCP Table ID | Yes | Applicable only for BigQuery template | - | Source table, should be a GCP table ID (bigquery-project:dataset.input_table) |
+| Conversions API access token  | STRING | Yes | Applicable for both BigQuery & GCS templates | - | Access Token for accessing Conversions API. Check instructions here: https://developers.facebook.com/docs/marketing-api/conversions-api/get-started/#access-token |
+| BigQuery Dead Letter Queue table  | GCP Table ID | Yes | Applicable for both BigQuery & GCS templates | - | Source table, should be a GCP table ID (bigquery-project:dataset.input_table) |
+| BigQuery Source Table | GCP Table ID | Yes | Applicable for both BigQuery & GCS templates | - | Table where to store API outputs(success or/and error message and input), should be a GCP table ID (bigquery-project:dataset.output_table) |
+| BigQuery Dead Letter Queue filter output | ENUN: (ERROR_ONLY, SUCCESS_ONLY, ALL) | Yes | Applicable for both BigQuery & GCS templates | - | Type of output to logs: ERROR_ONLY: only logs output with errors; SUCCESS_ONLY: only output with success API response; ALL: logs all output including errors and success |
+| Multi value separator | STRING | No | Applicable for both BigQuery & GCS templates | \| | Separator used for fields having multiple values such as emails (em), phones(ph) or content IDs (content_ids) |
+| Batch Size (number max of events per conversions api call) | INT | No | Applicable for both BigQuery & GCS templates | 50 | Number max of rows per single API call. Default value 50 |
+| Max Conversions API retry attempts | INT | No | Applicable for both BigQuery & GCS templates | 3 | Number max of retry in case of server error. Default 3 |
+| Exponential backoff factor for Conversions API retry | FLOAT | No | Applicable for both BigQuery & GCS templates | 2 | Number of times to wait in case of server error. Default, use an exponential factor of 2 |
 
 
 ## Pipeline Code Overview
