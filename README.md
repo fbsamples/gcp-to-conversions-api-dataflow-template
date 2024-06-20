@@ -92,7 +92,7 @@ Below is the expected table source format, please consult following documentatio
 - User data fields (hashing and normalization requirements): https://developers.facebook.com/docs/marketing-api/conversions-api/parameters/customer-information-parameters 
 
 | Field name    | Type | Mandatory | Multi-value| Description |
-| -------- | ------- | ------- | ------- | ------- |
+| -------- | ------- | ------- | ------- | :------- |
 | data_set_id  | INTEGER    | Yes  | No    | Destination data_set_id (e.g. 350218134519384)  |
 | event_name  | STRING    | Yes  | No    | Event name (e.g. Purchase)  |
 | event_time  | INTEGER    | Yes  | No    | Unix timestamp in seconds indicating when the actual event occurred (eg. 1708211706)  |
