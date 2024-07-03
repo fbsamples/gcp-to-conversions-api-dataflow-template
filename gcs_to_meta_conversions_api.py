@@ -1,4 +1,8 @@
 #!/usr/bin/env python
+#  Copyright (c) Meta Platforms, Inc. and affiliates.
+#  All rights reserved.
+#  This source code is licensed under the license found in the
+#  LICENSE file in the root directory of this source tree.
 
 #  Google Cloud to Meta Conversions API Dataflow connector
 import apache_beam as beam
