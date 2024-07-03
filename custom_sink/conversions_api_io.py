@@ -33,7 +33,7 @@ OUTPUT_STATUS_SUCCESS = 'SUCCESS'
 
 DEFAULT_META_CAPI_ENDPOINT = 'https://graph.facebook.com'
 DEFAULT_META_CAPI_API_VERSION = 'v19.0'
-
+DEFAULT_META_PARTNER_AGENT = 'oss-fbsample-capi-0.0.1'
 
 @dataclass
 class OutputStatusWrapper:
@@ -153,7 +153,7 @@ class _MakeMetaConversionsAPICalls(beam.DoFn):
             _session = requests.Session()
             _session.mount('https://', adapter)
 
-            req_body = {"data": parsed_elements}
+            req_body = {"data": parsed_elements, "partner_agent": DEFAULT_META_PARTNER_AGENT}
 
             response = _session.post(url, json=req_body)
             ok = response.status_code < 400
